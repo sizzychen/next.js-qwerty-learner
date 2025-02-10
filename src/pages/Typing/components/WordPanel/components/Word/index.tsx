@@ -139,6 +139,8 @@ export default function WordComponent({ word, onFinish }: { word: Word; onFinish
       if (wordState.letterStates[index] === 'correct' || (isShowAnswerOnHover && isHoveringWord)) return true
 
       if (wordDictationConfig.isOpen) {
+        // Show full word if error count reaches limit
+        if (state.currentWordErrorCount >= 3) return true
         if (wordDictationConfig.type === 'hideAll') return false
 
         const letter = wordState.displayWord[index]
@@ -278,7 +280,11 @@ export default function WordComponent({ word, onFinish }: { word: Word; onFinish
     if (wordState.wrongCount >= 4) {
       dispatch({ type: TypingStateActionType.SET_IS_SKIP, payload: true })
     }
-  }, [wordState.wrongCount, dispatch])
+
+    if (wordDictationConfig.isOpen && wordState.wrongCount > 0) {
+      dispatch({ type: TypingStateActionType.INCREMENT_WORD_ERROR_COUNT })
+    }
+  }, [wordState.wrongCount, dispatch, wordDictationConfig.isOpen])
 
   return (
     <>
