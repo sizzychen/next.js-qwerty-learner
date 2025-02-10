@@ -51,4 +51,7 @@ export type TypingState = {
   isLoopSingleWord: boolean
   // 是否正在保存数据
   isSavingRecord: boolean
+  // 当前单词的错误输入次数，在默写模式下使用
+  // 达到3次自动显示完整单词
+  currentWordErrorCount: number
 }
